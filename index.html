@@ -1,0 +1,152 @@
+<!doctype html>
+<!--[if IEMobile 7 ]>    <html class="no-js iem7" > <![endif]-->
+<!--[if (gt IEMobile 7)|!(IEMobile)]><!--> <html class="no-js" > <!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <title>Boolean Expression</title>
+  <link rel="stylesheet" href="cssmain.css" />
+  <script>window.jQuery || document.write('<script src="lib/jquery/jquery-2.2.1.min.js"><\/script>')</script>
+</head>
+
+<body>
+ <script src='lexer/lexer.js' type="text/javascript"></script>
+ <script src='shunt.js' type="text/javascript"></script>
+ <script src='jsmain.js' type="text/javascript"></script>
+ <script src='data.json' type="text/javascript"></script>
+ <script src='postfix.js' type="text/javascript"></script>
+ <script src='parser1.js' type="text/javascript"></script>
+  
+ <script type="text/javascript">
+         $(document).ready( function(){
+            init();
+         });        
+ </script>
+ 
+<div><p> Illustration of run time boolean expression - True and False - e+(m*y)*s, (e*(a*(b+c))+d), ((a+b)*(c+d)), (e+(a*b*c)*d), (a+b)+c*d, (e*((a*(b+c))+d)), (e+(a*b*c)+d),  (e+(a*b)+(m*d)), ((i*j)+k+l)*m, a+b+c*(d+e*f), (a+b+c)*d*(e+f)</p> 
+Expression : <input type="text" style="width: 600px; color: darkgray;  font-size: 25px;height: 35px;" id="expressionText" id="expressionText" value="(a+b+c)*d*(e+f)">
+
+    <input type="button" style="width: 100px; color: darkgray; font-size: 25px;height: 38px;" value="Draw" onclick="clickDraw();">
+    <input type="button" style="width: 100px; color: darkgray; font-size: 25px;height: 38px;" value="Test" onclick="regTest();">
+
+</div>
+
+<div id="result"></div>
+<br>
+<div id="postfixExp"></div>
+
+<div id="svgxml"></div>
+
+<div id="drawingCanvas"></div>
+<div id="drawingCanvas1"></div>
+<div id="drawingCanvas2"></div>
+<div id="drawingCanvas3"></div>
+<div id="drawingCanvas4"></div>
+
+<svg >
+  <defs>
+    <line id="line1_hor" x1="0" y1="0" x2="40" y2="0" />
+    <line id="line2_ver" x1="0" y1="0" x2="0" y2="40" />
+    <line id="line3_ver" x1="0" y1="0" x2="0" y2="40" />
+    <line id="line4_hor" x1="0" y1="0" x2="40" y2="0" />
+    
+    <g id="ladder_true">        
+        <use xlink:href="#line1_hor" x="20" y="20"  /> 
+        <use xlink:href="#line2_ver" x="60" y="0"  />
+        <use xlink:href="#line3_ver" x="80" y="0"  />
+        <use xlink:href="#line4_hor" x="80" y="20"  />
+    </g> 
+  </defs>
+
+  <defs>
+    <line id="line1_hor" x1="0" y1="0" x2="40" y2="0" />
+    <line id="line2_ver" x1="0" y1="0" x2="0" y2="40" />
+    <line id="line3_dgn" x1="0" y1="40" x2="40" y2="0" />
+    <line id="line4_ver" x1="0" y1="0" x2="0" y2="40" />
+    <line id="line5_hor" x1="0" y1="0" x2="40" y2="0" />
+
+    <g id="ladder_false">
+        <use xlink:href="#line1_hor" x="20" y="20"  /> 
+        <use xlink:href="#line2_ver" x="60" y="0"  />
+        <use xlink:href="#line3_dgn" x="50" y="0"  />
+        <use xlink:href="#line4_ver" x="80" y="0"  />
+        <use xlink:href="#line5_hor" x="80" y="20"  />
+    </g> 
+  </defs>
+
+  <defs>
+    <line id="conVer" x1="0" y1="0" x2="0" y2="100" />
+    <line id="conHor" x1="0" y1="50" x2="30" y2="50" />
+
+    <g id="connectRow">
+        <use xlink:href="#conVer" x="0" y="-30" /> 
+        <use xlink:href="#conHor" x="0" y="-30" />
+    </g> 
+  </defs>
+  <defs>
+    <line id="conHorEnd" x1="-20" y1="50" x2="0" y2="50" />
+    <line id="conVerEnd" x1="0" y1="0" x2="0" y2="100" />
+
+    <g id="connectRowEnd">
+        <use xlink:href="#conHorEnd" x="0" y="-30"  />
+        <use xlink:href="#conVerEnd" x="0" y="-30"  /> 
+    </g> 
+  </defs>
+  
+  <defs>
+    <line id="conHorOR" x1="0" y1="0" x2="10" y2="0" />
+    <line id="conVerOR" x1="10" y1="0" x2="10" y2="-100" />
+
+    <g id="connectRowOR">
+        <use xlink:href="#conHorOR" x="0" y="20"  /> 
+        <use xlink:href="#conVerOR" x="0" y="20" />
+    </g> 
+  </defs>
+  
+  <defs>
+    <line id="conHorORDown" x1="0" y1="0" x2="-20" y2="0" />
+    <line id="conVerORDown" x1="-20" y1="0" x2="-20" y2="100" />
+
+    <g id="connectRowORDown">
+        <use xlink:href="#conHorORDown" x="0" y="20"  /> 
+        <use xlink:href="#conVerORDown" x="0" y="20" />
+    </g> 
+  </defs>
+
+  <defs>
+    <line id="conHorEnd" x1="-20" y1="50" x2="0" y2="50" />
+    <line id="conVerEnd" x1="0" y1="0" x2="0" y2="100" />
+
+    <g id="connectRowEnd">
+        <use xlink:href="#conHorEnd" x="0" y="-30" />
+        <use xlink:href="#conVerEnd" x="0" y="-30" /> 
+    </g> 
+  </defs>
+
+  <defs>
+    <line id="connectOutputRow" x1="0" y1="0" x2="300" y2="0" />
+
+    <g id="connectOutput">
+        <use xlink:href="#connectOutputRow" x="20" y="20" /> 
+    </g> 
+  </defs>
+  <defs>
+    <line id="line1_hor" x1="0" y1="0" x2="40" y2="0" />
+    <path id="curve1" d="M 20 0 q -20 20 0 40" fill="none"/>
+    <path id="curve2" d="M -20 0 q 20 20 0 40" fill="none"/>
+    <line id="line4_hor" x1="0" y1="0" x2="40" y2="0" />
+    
+    <g id="ladder_output">        
+        <use xlink:href="#line1_hor" x="20" y="20"  /> 
+        <use xlink:href="#curve1" x="50" y="0"  ; />
+        <use xlink:href="#curve2" x="120" y="0" />
+        <use xlink:href="#line4_hor" x="110" y="20" />
+    </g> 
+  </defs>
+    
+
+
+</svg>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+  <style>
+
+    html, body{  overflow-x: hidden;  }
+    body{ display:block; width:100%; height:100%;
+        font-size: 12px;
+        margin:20px; padding:20px;
+        font-family: Sans-Serif;
+
+    }
+
+    .black{
+      fill:rgb(100,0,255);
+      stroke-width:3;      
+      stroke:rgb(169,169,169); // dark gray 
+    }
+
+   .green{
+      fill:rgb(100,0,255);
+      stroke-width:3;      
+      stroke:rgb(0,169,169); // dark gray 
+    }
+
+    .blue{
+      fill:rgb(0,0,255);
+      stroke-width:3;      
+      stroke:rgb(0,0,255); // dark gray 
+    }
+
+    .red{
+      fill:rgb(0,0,255);
+      stroke-width:3;      
+      stroke:rgb(255,0,0); // dark gray 
+    }
+
+   .green{
+      stroke:rgb(0,169,169); // dark green
+    }
+
+
+  </style>
